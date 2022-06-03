@@ -81,6 +81,32 @@ void setup() {
 
   // Komunikasi antar Arduino menggunakan komunikasi I2C
   Wire.begin();
+  Serial.println("Masukkan Nilai Kp Ki Kd secara terpisah melalui Serial Monitor");
+  while (pc!=3) {
+      if (Serial.available() and pc==0) {
+        pc = 1; // variabel penanda bahwa user ingin mengubah nilai Ki
+        kp = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Kp=");
+        Serial.print(kp);
+        Serial.print("\t");
+      }
+      else if (Serial.available() and pc==1) {
+        pc = 2; // variabel penanda bahwa user ingin mengubah nilai Kd
+        ki = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Ki=");
+        Serial.print(ki);
+        Serial.print("\t");
+      }
+      else if (Serial.available() and pc==2) {
+        pc = 3; // variabel penanda bahwa user telah selesai mengganti nilai konstanta pengendali
+        kd = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Kd=");
+        Serial.println(kd);
+      }  
+      terima=0; //reset pengendali
+      kirim=0; //reset  
+    }
+    pc=0; // variabel penanda bahwa user ingin mengubah nilai Kp
 }
 
 void loop() {
@@ -110,9 +136,10 @@ void loop() {
         Serial.print("Kd=");
         Serial.println(kd);
       }  
+      terima=0; //reset pengendali
+      kirim=0; //reset  
     }
     pc=0; // variabel penanda bahwa user ingin mengubah nilai Kp
-    terima=0; //reset pengendali
   }
   
   // Proses pengiriman dan penerimaan data i2c
@@ -138,9 +165,9 @@ void loop() {
       MasterSend = kirim;
     }
     //Pengecekan Pengendali PID
-//    Serial.print(input);
-//    Serial.print("\t");
-//    Serial.println(terima);
+    Serial.print(input);
+    Serial.print("\t");
+    Serial.println(terima);
 
     //Pengecekan pengiriman dan penerimaan data i2c
 //    Serial.print("Master");
