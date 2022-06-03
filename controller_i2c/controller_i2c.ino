@@ -16,7 +16,7 @@ float kp = 0.351,
       ki = 0.044,
       kd = 0;
 int input;
-int state, dont;
+int state, dont, pc;
 int8_t terima, kirim;
 byte MasterSend;
 byte MasterReceived;
@@ -88,10 +88,34 @@ void loop() {
   input = analogRead(A0);
   input = map(input, 0, 1023, -128, 127);
 
+  if (Serial.available()){
+    while (pc!=3) {
+      if (Serial.available() and pc==0) {
+        pc = 1;
+        kp = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Kp=");
+        Serial.print(kp);
+        Serial.print("\t");
+      }
+      else if (Serial.available() and pc==1) {
+        pc = 2;
+        ki = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Ki=");
+        Serial.print(ki);
+        Serial.print("\t");
+      }
+      else if (Serial.available() and pc==2) {
+        pc = 3;
+        kd = Serial.parseFloat(SKIP_ALL, '\n');
+        Serial.print("Kd=");
+        Serial.println(kd);
+      }  
+    }
+    pc=0;
+  }
+  
   // Proses pengiriman dan penerimaan data i2c
   if(!dont){ //variable dont menandakan aktivitas komunikasi tidak dilakukan
-    Serial.print(input);
-    Serial.print("\t");
 
     // Pengiriman Data ke Slave
     if(!state){
@@ -112,13 +136,15 @@ void loop() {
       kirim = computePID(input,terima);
       MasterSend = kirim;
     }
-    Serial.println(terima);
+    //Pengecekan Pengendali PID
+//    Serial.print(input);
+//    Serial.print("\t");
+//    Serial.println(terima);
 
     //Pengecekan pengiriman dan penerimaan data i2c
+//    Serial.print("Master");
+//    Serial.print("\t");
 //    Serial.print(MasterReceived);
-//    Serial.print("\t");
-//    Serial.print("\t");
-//    Serial.print(kirim);
 //    Serial.print("\t");
 //    Serial.println(MasterSend);
 
