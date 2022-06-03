@@ -165,9 +165,9 @@ void loop() {
       MasterSend = kirim;
     }
     //Pengecekan Pengendali PID
-    Serial.print(input);
-    Serial.print("\t");
-    Serial.println(terima);
+//    Serial.print(input);
+//    Serial.print("\t");
+//    Serial.println(terima);
 
     //Pengecekan pengiriman dan penerimaan data i2c
 //    Serial.print("Master");
