@@ -59,9 +59,9 @@ void DataReceive(int numBytes)
   SlaveSend = int8_t(y[i]);
 
   //Pengecekan penerimaan data i2c
-//  Serial.print(i);
+//  Serial.print("Slave");
 //  Serial.print("\t");
-//  Serial.print(x[i]);
+//  Serial.print(SlaveReceived);
 //  Serial.print("\t");
 }
 
@@ -72,7 +72,5 @@ void DataRequest()
   i++;
   
   //Pengecekan pengiriman data i2c
-//  Serial.print(SlaveSend);
-//  Serial.print("\t");
-//  Serial.println(y[i]);
+//  Serial.println(SlaveSend);
 }
